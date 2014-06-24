@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Genereate weekly summaries from daily notes.
+#
+
+echo "Cleaning old entries."
+rm -rf weekly/*
+
+echo "Finding daily entries."
+FILES=$(find daily -type f)
+
+echo "Writing weekly summaries."
+for FILE in $FILES ; do
+  #echo $FILE
+
+  DAY=$(basename $FILE | sed -e 's/\..*$//')
+  WEEK=$(date -j -f "%Y-%m-%d" "$DAY" "+%W")
+  YEAR=$(date -j -f "%Y-%m-%d" "$DAY" "+%Y")
+
+  OUT="weekly/$YEAR/$YEAR-week-$WEEK.md" 
+
+  if [ ! -d weekly/$YEAR ] ; then
+    mkdir weekly/$YEAR
+  fi
+
+  # Generate a header for new summaries, otherwise append daily notes. 
+  if [ ! -e $OUT ] ; then
+    echo "Weekly Summary - $YEAR Week $WEEK" > $OUT
+    echo "===" >> $OUT
+    echo >> $OUT
+  else
+    cat $FILE >> $OUT
+    echo >> $OUT
+  fi
+
+done
+
+echo "Done"
+exit 0
+
+# EOF
+

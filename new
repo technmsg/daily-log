@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Initialize a new daily activity log.
+#
+
+# works for Darwin and GNU version of date
+YEAR=`date "+%Y"`
+MONTH=`date "+%m"`
+DAY=`date "+%d"`
+DOW=`date "+%a"`
+
+TODAY="${YEAR}-${MONTH}-${DAY}"
+echo "Today is ${TODAY}."
+
+# To switch to straight text, edit the suffix.
+LOG_DIR="daily/${YEAR}/${MONTH}"
+LOG_FILE="${LOG_DIR}/${TODAY}.md"
+
+echo "Checking for ${LOG_DIR}."
+if [ ! -d ${LOG_DIR} ] ; then
+  mkdir -pv ${LOG_DIR}
+fi
+
+# start a new file
+if [ ! -f ${LOG_FILE} ] ; then
+  echo "${TODAY} ($DOW)" > ${LOG_FILE}
+  echo ========== >> ${LOG_FILE}
+fi
+
+echo "Editing ${LOG_FILE}."
+if [ "$(uname)" == "Darwin" ] ; then
+  open ${LOG_FILE}
+else
+  vim ${LOG_FILE}
+fi
+ 
+# EOF
+
