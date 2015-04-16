@@ -23,15 +23,16 @@ for FILE in $FILES ; do
     mkdir weekly/$YEAR
   fi
 
-  # Generate a header for new summaries, otherwise append daily notes. 
+  # Generate a header for new summaries, otherwise append daily notes.
   if [ ! -e $OUT ] ; then
     echo "Weekly Summary - $YEAR Week $WEEK" > $OUT
     echo "===" >> $OUT
     echo >> $OUT
-  else
-    cat $FILE >> $OUT
-    echo >> $OUT
   fi
+
+  echo >> $OUT
+  cat $FILE >> $OUT
+  echo >> $OUT
 
 done
 
@@ -39,4 +40,3 @@ echo "Done"
 exit 0
 
 # EOF
-
